@@ -94,7 +94,7 @@ func TestSse(*testing.T) {
 	go func() {
 		for {
 			time.Sleep(time.Second * 2)
-			data := fmt.Sprintf("===>%s", time.Now().Format("2006-01-02 15:04:05"))
+			data := fmt.Sprintf("===>%s", time.Now().Format("2006-01-02 15:01:05"))
 			log.Println("Sending event data")
 			broker.Notifier <- []byte(data)
 		}
@@ -104,7 +104,7 @@ func TestSse(*testing.T) {
 		for {
 			time.Sleep(time.Second * 1)
 			if time.Now().Second()%2 == 0 {
-				data := fmt.Sprintf("-->%s", time.Now().Format("2006-01-02 15:04:05"))
+				data := fmt.Sprintf("-->%s", time.Now().Format("2006-01-02 15:01:05"))
 				log.Println("Sending event data2")
 				broker.Notifier <- []byte(data)
 			}
