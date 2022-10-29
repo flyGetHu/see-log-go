@@ -16,15 +16,17 @@ type Broker struct {
 }
 
 func NewBroker() *Broker {
-	return &Broker{
+	broker := &Broker{
 		Notifier:       make(chan []byte, 1),
 		newClients:     make(chan chan []byte),
 		closingClients: make(chan chan []byte),
 		clients:        make(map[chan []byte]bool),
 	}
+	go broker.listen()
+	return broker
 }
 
-func (broker *Broker) Listen() {
+func (broker *Broker) listen() {
 	for {
 		select {
 		case s := <-broker.newClients:
