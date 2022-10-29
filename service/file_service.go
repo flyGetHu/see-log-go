@@ -3,6 +3,7 @@ package service
 import (
 	"fmt"
 	"github.com/hpcloud/tail"
+	"log"
 	"see-log-go/enitty"
 	"time"
 )
@@ -17,7 +18,7 @@ func MonitorFile(broker *enitty.Broker, path string, count int64) {
 	}
 	tails, err := tail.TailFile(path, config)
 	if err != nil {
-		fmt.Println("tail file failed, err:", err)
+		log.Println("tail file failed, err:", err)
 
 	}
 	for {

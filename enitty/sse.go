@@ -1,7 +1,7 @@
 package enitty
 
 import (
-	"fmt"
+	"log"
 )
 
 type Broker struct {
@@ -11,6 +11,7 @@ type Broker struct {
 
 	ClosingClients chan chan []byte
 
+	//客户端建立链接 链接通道->是否停用
 	clients map[chan []byte]bool
 }
 
@@ -32,18 +33,20 @@ func (broker *Broker) HasClient() bool {
 func (broker *Broker) listen() {
 	for {
 		select {
-		case s := <-broker.NewClients:
+		case socketChan := <-broker.NewClients:
 			//新连接进行注册
-			fmt.Println("新用户注册")
-			broker.clients[s] = true
-		case s := <-broker.ClosingClients:
+			log.Println("新用户注册", &socketChan)
+			broker.clients[socketChan] = false
+		case socketChan := <-broker.ClosingClients:
 			//断开删除链接
-			fmt.Println("用户断开")
-			delete(broker.clients, s)
+			log.Println("用户断开", &socketChan)
+			delete(broker.clients, socketChan)
 		case event := <-broker.Notifier:
 			//广播消息
-			for clientMessageChan := range broker.clients {
-				clientMessageChan <- event
+			for clientMessageChan, isDeactivate := range broker.clients {
+				if isDeactivate {
+					clientMessageChan <- event
+				}
 			}
 		}
 	}

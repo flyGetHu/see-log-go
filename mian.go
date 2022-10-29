@@ -7,5 +7,6 @@ import (
 )
 
 func main() {
-	log.Fatalln("error", http.ListenAndServe(":8080", nil))
+	log.Println("日志查看项目启动:端口3000")
+	log.Fatalln("error", http.ListenAndServe(":3000", nil))
 }

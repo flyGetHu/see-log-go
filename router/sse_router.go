@@ -2,6 +2,7 @@ package router
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"net/url"
 	"os"
@@ -55,7 +56,7 @@ func seeLog(rw http.ResponseWriter, req *http.Request) {
 		bytes := <-messageChan
 		_, err := fmt.Fprintf(rw, "%s", bytes)
 		if err != nil {
-			fmt.Println("输出http失败:", err)
+			log.Println("输出http失败:", err)
 		}
 		flusher.Flush()
 	}
