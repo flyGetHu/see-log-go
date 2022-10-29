@@ -36,7 +36,7 @@ func (broker *Broker) listen() {
 		case socketChan := <-broker.NewClients:
 			//新连接进行注册
 			log.Println("新用户注册", &socketChan)
-			broker.clients[socketChan] = false
+			broker.clients[socketChan] = true
 		case socketChan := <-broker.ClosingClients:
 			//断开删除链接
 			log.Println("用户断开", &socketChan)

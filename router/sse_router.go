@@ -29,7 +29,7 @@ func seeLog(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	rw.Header().Set("Content-Type", "text/event-stream")
+	rw.Header().Set("Content-Type", "text/event-stream;charset:utf-8")
 	rw.Header().Set("Cache-Control", "no-cache")
 	rw.Header().Set("Connection", "keep-alive")
 	rw.Header().Set("Access-Control-Allow-Origin", "*")
@@ -54,7 +54,7 @@ func seeLog(rw http.ResponseWriter, req *http.Request) {
 	}()
 	for {
 		bytes := <-messageChan
-		_, err := fmt.Fprintf(rw, "%s", bytes)
+		_, err := fmt.Fprintf(rw, "%s\n", bytes)
 		if err != nil {
 			log.Println("输出http失败:", err)
 		}
@@ -64,7 +64,7 @@ func seeLog(rw http.ResponseWriter, req *http.Request) {
 
 // 处理请求参数
 func dealSseParams(values *url.Values) (string, int64, error) {
-	logFilePath := values.Get("path")
+	logFilePath := values.Get("file_path")
 	logFileCount, err := strconv.Atoi(values.Get("count"))
 	if err != nil {
 		logFileCount = 100

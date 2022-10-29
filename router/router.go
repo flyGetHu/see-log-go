@@ -5,5 +5,5 @@ import (
 )
 
 func init() {
-	http.HandleFunc("/sse/log", seeLog)
+	http.HandleFunc("/see/log", seeLog)
 }
