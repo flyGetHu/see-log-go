@@ -1,7 +1,9 @@
 package router
 
-import "net/http"
+import (
+	"net/http"
+)
 
 func init() {
-	http.Handle("/sse", broker())
+	http.HandleFunc("/sse/log", seeLog)
 }
