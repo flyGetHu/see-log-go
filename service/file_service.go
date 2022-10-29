@@ -7,16 +7,15 @@ import (
 	"time"
 )
 
-func MonitorFile(broker *enitty.Broker) {
-	fileName := "D:\\home\\work\\admin-app\\admin-app_2022-07-11.log"
+func MonitorFile(broker *enitty.Broker, path string, count int64) {
 	config := tail.Config{
-		ReOpen:    true,                                   // 重新打开
-		Follow:    true,                                   // 是否跟随
-		Location:  &tail.SeekInfo{Offset: 100, Whence: 1}, // 从文件的哪个地方开始读
-		MustExist: false,                                  // 文件不存在不报错
+		ReOpen:    true,                                     // 重新打开
+		Follow:    true,                                     // 是否跟随
+		Location:  &tail.SeekInfo{Offset: count, Whence: 1}, // 从文件的哪个地方开始读
+		MustExist: false,                                    // 文件不存在不报错
 		Poll:      true,
 	}
-	tails, err := tail.TailFile(fileName, config)
+	tails, err := tail.TailFile(path, config)
 	if err != nil {
 		fmt.Println("tail file failed, err:", err)
 
