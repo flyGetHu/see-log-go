@@ -23,9 +23,11 @@ func (broker *Broker) listen() {
 		select {
 		case s := <-broker.newClients:
 			//新连接进行注册
+			fmt.Println("新用户注册")
 			broker.clients[s] = true
 		case s := <-broker.closingClients:
 			//断开删除链接
+			fmt.Println("用户断开")
 			delete(broker.clients, s)
 		case event := <-broker.Notifier:
 			//广播消息
@@ -36,7 +38,7 @@ func (broker *Broker) listen() {
 	}
 }
 
-func (broker *Broker) ServeHTTP(rw http.ResponseWriter, resp *http.Request) {
+func (broker *Broker) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 	flusher, ok := rw.(http.Flusher)
 	if !ok {
 		http.Error(rw, "不支持Stream", http.StatusInternalServerError)
@@ -56,10 +58,10 @@ func (broker *Broker) ServeHTTP(rw http.ResponseWriter, resp *http.Request) {
 		broker.closingClients <- messageChan
 	}()
 
-	notify := rw.(http.CloseNotifier).CloseNotify()
+	ctx := req.Context()
 
 	go func() {
-		<-notify
+		<-ctx.Done()
 		broker.closingClients <- messageChan
 	}()
 
@@ -83,11 +85,6 @@ func NewSSE() (broker *Broker) {
 	go broker.listen()
 	return
 }
-
-//func  ServeHTTP(writer http.ResponseWriter, request *http.Request) {
-//	//TODO implement me
-//	panic("implement me")
-//}
 
 func TestSse(*testing.T) {
 	broker := NewSSE()
