@@ -3,6 +3,8 @@ package service
 import (
 	"fmt"
 	"github.com/hpcloud/tail"
+	"io"
+	"os"
 	"testing"
 	"time"
 )
@@ -29,5 +31,17 @@ func TestFileTail(t *testing.T) {
 			continue
 		}
 		fmt.Println("line:", line.Text)
+	}
+}
+
+func TestWriteFile(t *testing.T) {
+	fileName := "D:\\home\\work\\admin-app\\admin-app_2022-07-11.log"
+	file, err := os.OpenFile(fileName, os.O_APPEND, 0666)
+	if err != nil {
+		return
+	}
+	for {
+		time.Sleep(time.Second)
+		io.WriteString(file, time.Now().Format("15:01:05")+"\n")
 	}
 }
