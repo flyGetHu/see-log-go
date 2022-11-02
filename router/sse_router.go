@@ -29,7 +29,7 @@ func seeLog(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	rw.Header().Set("Content-Type", "text/event-stream;charset:utf-8")
+	rw.Header().Set("Content-Type", "text/event-stream;charset=UTF-8")
 	rw.Header().Set("Cache-Control", "no-cache")
 	rw.Header().Set("Connection", "keep-alive")
 	rw.Header().Set("Access-Control-Allow-Origin", "*")
